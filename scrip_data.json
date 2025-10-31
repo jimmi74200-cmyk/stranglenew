@@ -1,0 +1,23 @@
+{
+    "NIFTY": {
+        "Exch": "N",
+        "ExchType": "C",
+        "ScripCode": 999920000,
+        "Name": "NIFTY",
+        "FullName": "NIFTY 50"
+    },
+    "BANKNIFTY": {
+        "Exch": "N",
+        "ExchType": "C",
+        "ScripCode": 999920005,
+        "Name": "BANKNIFTY",
+        "FullName": "NIFTY BANK"
+    },
+    "FINNIFTY": {
+        "Exch": "N",
+        "ExchType": "C",
+        "ScripCode": 999920041,
+        "Name": "FINNIFTY",
+        "FullName": "NIFTY FINANCIAL SERVICES"
+    }
+}

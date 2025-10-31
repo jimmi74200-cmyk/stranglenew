@@ -1,0 +1,12 @@
+# 5paisa API credentials
+# Please fill in your credentials after running an authentication script.
+APP_NAME = "YOUR_APP_NAME"
+APP_SOURCE = "YOUR_APP_SOURCE"
+USER_ID = "YOUR_USER_ID"
+PASSWORD = "" # Not used in modern login flows, can be left blank
+USER_KEY = "YOUR_USER_KEY"
+ENCRYPTION_KEY = "YOUR_ENCRYPTION_KEY"
+
+# Populated by an authentication script (not provided, user must authenticate separately)
+ACCESS_TOKEN = "YOUR_ACCESS_TOKEN"
+CLIENT_CODE = "YOUR_CLIENT_CODE"

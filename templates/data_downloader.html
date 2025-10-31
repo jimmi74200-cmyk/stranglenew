@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>5paisa Historical Data Viewer</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 2em; background-color: #f4f4f9; }
+        .container { max-width: 800px; margin: auto; padding: 2em; background: #fff; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+        h1 { text-align: center; color: #333; }
+        label { display: block; margin-top: 1em; font-weight: bold; color: #555; }
+        input[type="date"], select {
+            width: 100%;
+            padding: 0.8em;
+            margin-top: 0.5em;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        button {
+            width: 100%;
+            padding: 1em;
+            margin-top: 2em;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            font-size: 1em;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        button:hover { background-color: #0056b3; }
+        .form-row { display: flex; gap: 1em; }
+        .form-row > div { flex: 1; }
+        .data-section { margin-top: 3em; }
+        .data-header { display: flex; justify-content: space-between; align-items: center; }
+        .download-link {
+            display: inline-block;
+            padding: 0.6em 1.2em;
+            background-color: #28a745;
+            color: white;
+            text-decoration: none;
+            border-radius: 4px;
+            font-weight: bold;
+        }
+        .download-link:hover { background-color: #218838; }
+        table { width: 100%; border-collapse: collapse; margin-top: 1em; }
+        th, td { padding: 0.8em; border: 1px solid #ddd; text-align: left; }
+        th { background-color: #f2f2f2; }
+        .message { margin-top: 1em; padding: 1em; border-radius: 4px; background-color: #f8d7da; color: #721c24; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Historical Data Viewer</h1>
+        <form action="/view_data" method="post">
+
+            <label for="symbol">Symbol</label>
+            <select id="symbol" name="symbol" required>
+                {% for symbol in symbols %}
+                    <option value="{{ symbol }}" {% if form_data and form_data.symbol == symbol %}selected{% endif %}>{{ symbol }}</option>
+                {% endfor %}
+            </select>
+
+            <label for="interval">Interval</label>
+            <select id="interval" name="interval">
+                {% set intervals = ["1m", "5m", "10m", "15m", "30m", "60m", "1d"] %}
+                {% for iv in intervals %}
+                    <option value="{{ iv }}" {% if form_data and form_data.interval == iv %}selected{% endif %}>{{ iv }}</option>
+                {% endfor %}
+            </select>
+
+            <div class="form-row">
+                <div>
+                    <label for="from_date">From Date</label>
+                    <input type="date" id="from_date" name="from_date" value="{{ form_data.from_date if form_data else '' }}" required>
+                </div>
+                <div>
+                    <label for="to_date">To Date</label>
+                    <input type="date" id="to_date" name="to_date" value="{{ form_data.to_date if form_data else '' }}" required>
+                </div>
+            </div>
+
+            <button type="submit">View Data</button>
+        </form>
+
+        {% if message %}
+            <div class="message">
+                <p>{{ message }}</p>
+                {% if raw_response %}
+                    <pre><code>{{ raw_response | tojson(indent=2) }}</code></pre>
+                {% endif %}
+            </div>
+        {% endif %}
+
+        {% if data %}
+        <div class="data-section">
+            <div class="data-header">
+                <h2>Data for {{ form_data.symbol }}</h2>
+                <a href="{{ url_for('download_csv', **form_data) }}" class="download-link">Download as CSV</a>
+            </div>
+            <table>
+                <thead>
+                    <tr>
+                        {% for key in data[0].keys() %}
+                            <th>{{ key }}</th>
+                        {% endfor %}
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for row in data %}
+                    <tr>
+                        {% for value in row.values() %}
+                            <td>{{ value }}</td>
+                        {% endfor %}
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% endif %}
+    </div>
+</body>
+</html>
